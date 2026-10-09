@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Marino Kids – Les Petits Rêveurs | École maternelle & Club d'enfants au Bardo</title>
+<meta name="description" content="Marino Kids – Les Petits Rêveurs : école maternelle et club d'enfants au Bardo, Tunisie. Inscriptions 2026/2027 et club d'été ouverts.">
+
+<!-- ===== PWA / Mobile meta ===== -->
+<meta name="theme-color" content="#4F9A67">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Marino Kids">
+<meta name="application-name" content="Marino Kids">
+<link id="manifestLink" rel="manifest" href="data:application/manifest+json,%7B%7D">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          display: ['"Baloo 2"', 'cursive'],
+          body: ['Nunito', 'sans-serif'],
+        },
+        colors: {
+          cream:'#FDF8F0', sand:'#F5EBDD',
+          sage:{50:'#EFF7F0',100:'#DCEFE0',200:'#BCE0C6',300:'#93CBA4',400:'#6DB483',500:'#4F9A67',600:'#3C7D53',700:'#316543'},
+          sky:{50:'#EFF8FC',100:'#D8EEF8',200:'#B0DCF2',300:'#7FC4E8',400:'#4AA6D9',500:'#2E8BBE'},
+          peach:{100:'#FFE9D9',200:'#FFD3B8',300:'#FFB98F',400:'#F69B66'},
+          lilac:{100:'#F0E8FA',200:'#E0D2F5',300:'#C8B3EC'},
+          sun:{100:'#FFF4D6',200:'#FFE7A8',300:'#FFD36B',400:'#F4B73F'},
+          ink:'#3D4A44',
+        },
+        borderRadius: { blob:'38% 62% 55% 45% / 45% 40% 60% 55%' },
+        boxShadow: {
+          soft:'0 10px 30px -10px rgba(61,74,68,.15)',
+          lift:'0 20px 45px -15px rgba(61,74,68,.22)',
+        }
+      }
+    }
+  }
+</script>
+
+<style>
+  :root {
+    color-scheme: light;
+    --sat: env(safe-area-inset-top, 0px);
+    --sab: env(safe-area-inset-bottom, 0px);
+  }
+  html, body { overflow-x: hidden; max-width: 100%; }
+  body {
+    font-family: 'Nunito', sans-serif; color:#3D4A44; background:#FDF8F0;
+    padding-top: env(safe-area-inset-top);
+    -webkit-tap-highlight-color: transparent;
+  }
+  ::selection { background:#BCE0C6; }
+
+  /* Header offset respects safe area + fixed header */
+  #header { top: var(--sat); }
+  main { padding-top: calc(var(--sat) + 64px); }
+  @media (min-width:768px){ main { padding-top: calc(var(--sat) + 80px); } }
+
+  /* Floating shapes */
+  .float-slow { animation: floatY 7s ease-in-out infinite; }
+  .float-med  { animation: floatY 5.5s ease-in-out infinite; }
+  .float-fast { animation: floatY 4.5s ease-in-out infinite; }
+  @keyframes floatY { 0%,100%{transform:translateY(0) rotate(0)} 50%{transform:translateY(-14px) rotate(4deg)} }
+  .wiggle { animation: wiggle 6s ease-in-out infinite; }
+  @keyframes wiggle { 0%,100%{transform:rotate(-3deg)} 50%{transform:rotate(3deg)} }
+
+  .hero-wave { display:block; width:100%; height:64px; }
+  @media (min-width:768px){ .hero-wave{ height:110px; } }
+
+  .reveal { opacity:0; transform:translateY(28px); transition:opacity .7s ease, transform .7s ease; }
+  .reveal.visible { opacity:1; transform:translateY(0); }
+
+  .act-card { transition: transform .35s ease, box-shadow .35s ease; }
+  .act-card:hover, .act-card:active { transform: translateY(-6px); box-shadow:0 22px 45px -15px rgba(61,74,68,.25); }
+
+  .btn-bounce { transition: transform .2s ease, box-shadow .2s ease; }
+  .btn-bounce:hover { transform: translateY(-3px) scale(1.02); }
+  .btn-bounce:active { transform: translateY(0) scale(.96); }
+
+  .marquee { overflow:hidden; }
+  .marquee-track { display:flex; width:max-content; animation:marquee 22s linear infinite; }
+  @keyframes marquee { to { transform:translateX(-50%); } }
+
+  #mobileMenu { transition:max-height .45s ease, opacity .35s ease; max-height:0; opacity:0; }
+  #mobileMenu.open { max-height:480px; opacity:1; }
+
+  .field { transition:border-color .2s ease, box-shadow .2s ease; }
+  .field:focus { border-color:#6DB483; box-shadow:0 0 0 4px rgba(109,180,131,.18); outline:none; }
+  input.field, select.field, textarea.field { font-size:16px; } /* évite le zoom auto iOS */
+
+  #header.scrolled { box-shadow:0 6px 25px -8px rgba(61,74,68,.18); }
+
+  /* ===== Bottom nav (mobile) ===== */
+  #bottomNav {
+    padding-bottom: var(--sab);
+    min-height: calc(64px + var(--sab));
+  }
+  .bn-item { min-height:52px; min-width:48px; }
+  .bn-item.active .bn-label { color:#3C7D53; }
+  .bn-item.active .bn-icon { color:#4F9A67; transform:translateY(-2px) scale(1.12); }
+  .bn-icon { transition: transform .25s ease, color .25s ease; }
+  #bottomNav.hidden-nav { transform: translateY(110%); }
+  #bottomNav { transition: transform .35s ease; }
+
+  /* ===== More sheet ===== */
+  #moreSheet { transition: transform .35s cubic-bezier(.32,.72,.24,1), opacity .3s ease; }
+  #moreSheet.closed { transform: translateY(100%); opacity:0; pointer-events:none; }
+  #moreOverlay { transition: opacity .3s ease; }
+  #moreOverlay.closed { opacity:0; pointer-events:none; }
+
+  .touch-target { min-width:44px; min-height:44px; }
+
+  /* Hero fills viewport height nicely without excess whitespace */
+  #accueil .hero-inner { min-height: calc(100dvh - 64px - var(--sat)); }
+  @media (min-width:1024px){ #accueil .hero-inner { min-height: auto; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .float-slow,.float-med,.float-fast,.wiggle,.marquee-track { animation:none !important; }
+    .reveal { transition:none; opacity:1; transform:none; }
+  }
+</style>
+</head>
+
+<body class="antialiased">
+
+<!-- ======================= HEADER ======================= -->
+<header id="header" class="fixed top-0 inset-x-0 z-50 bg-cream/90 backdrop-blur-md transition-shadow duration-300">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16 md:h-20">
+
+      <a href="#accueil" class="flex items-center gap-3 min-w-0 touch-target">
+        <span class="relative flex-shrink-0 w-11 h-11 rounded-full bg-sage-300 grid place-items-center shadow-soft">
+          <svg viewBox="0 0 24 24" class="w-6 h-6 text-white" fill="currentColor" aria-hidden="true">
+            <path d="M12 3.2c.3-1 1.7-1 2 0l.6 2c.2.6.9.9 1.5.6l1.9-1c.9-.5 1.9.4 1.5 1.4l-1 1.9c-.3.6 0 1.3.6 1.5l2 .6c1 .3 1 1.7 0 2l-2 .6c-.6.2-.9.9-.6 1.5l1 1.9c.5.9-.4 1.9-1.4 1.5l-1.9-1c-.6-.3-1.3 0-1.5.6l-.6 2c-.3 1-1.7 1-2 0l-.6-2c-.2-.6-.9-.9-1.5-.6l-1.9 1c-.9.5-1.9-.4-1.5-1.4l1-1.9c.3-.6 0-1.3-.6-1.5l-2-.6c-1-.3-1-1.7 0-2l2-.6c.6-.2.9-.9.6-1.5l-1-1.9c-.5-.9.4-1.9 1.4-1.5l1.9 1c.6.3 1.3 0 1.5-.6l.6-2Z"/>
+            <circle cx="12" cy="12" r="3.4"/>
+          </svg>
+          <span class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-sun-300 border-2 border-cream"></span>
+        </span>
+        <span class="min-w-0 leading-tight">
+          <span class="block font-display font-bold text-lg md:text-xl text-ink truncate">Marino Kids</span>
+          <span class="block text-[11px] md:text-xs font-bold tracking-wide text-sage-600 uppercase">Les Petits Rêveurs</span>
+        </span>
+      </a>
+
+      <!-- Desktop nav -->
+      <nav class="hidden lg:flex items-center gap-6 text-sm font-bold text-ink/80" aria-label="Navigation principale">
+        <a href="#apropos" class="hover:text-sage-600 transition-colors px-2 py-2">À propos</a>
+        <a href="#activites" class="hover:text-sage-600 transition-colors px-2 py-2">Activités</a>
+        <a href="#valeurs" class="hover:text-sage-600 transition-colors px-2 py-2">Nos valeurs</a>
+        <a href="#contact" class="hover:text-sage-600 transition-colors px-2 py-2">Contact</a>
+
+        <!-- Fullscreen (desktop) -->
+        <button id="fsBtnDesktop" class="touch-target inline-flex items-center gap-2 bg-sand hover:bg-sage-100 text-ink font-extrabold px-4 py-2.5 rounded-full text-sm" aria-label="Activer le plein écran">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+          <span class="fs-label">Plein écran</span>
+        </button>
+
+        <!-- Install (desktop) -->
+        <button id="installBtnDesktop" class="hidden touch-target inline-flex items-center gap-2 bg-sky-100 hover:bg-sky-200 text-sky-500 font-extrabold px-4 py-2.5 rounded-full text-sm">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+          Installer l'application
+        </button>
+
+        <a href="#contact" class="btn-bounce inline-flex items-center gap-2 bg-sage-500 hover:bg-sage-600 text-white px-5 py-2.5 rounded-full shadow-soft">
+          Pré-inscription
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5-5 5M6 12h12"/></svg>
+        </a>
+      </nav>
+
+      <!-- Mobile burger -->
+      <button id="burger" class="lg:hidden touch-target w-11 h-11 grid place-items-center rounded-full bg-sage-100 text-sage-700" aria-label="Ouvrir le menu" aria-expanded="false">
+        <svg id="iconOpen" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 7h16M4 12h16M4 17h10"/></svg>
+        <svg id="iconClose" class="w-6 h-6 hidden" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div id="mobileMenu" class="lg:hidden bg-cream/95 backdrop-blur-md border-t border-sage-100">
+    <nav class="px-6 py-4 flex flex-col gap-1 text-base font-bold text-ink/85" aria-label="Menu mobile">
+      <a href="#apropos" class="mob-link touch-target flex items-center py-3 border-b border-sand">À propos</a>
+      <a href="#activites" class="mob-link touch-target flex items-center py-3 border-b border-sand">Activités</a>
+      <a href="#valeurs" class="mob-link touch-target flex items-center py-3 border-b border-sand">Nos valeurs</a>
+      <a href="#contact" class="mob-link touch-target flex items-center py-3">Contact</a>
+      <a href="#contact" class="mob-link btn-bounce mt-2 text-center bg-sage-500 text-white px-5 py-3.5 rounded-full shadow-soft">Pré-inscription 2026/2027</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ======================= BOTTOM NAV (mobile) ======================= -->
+<nav id="bottomNav" class="lg:hidden fixed bottom-0 inset-x-0 z-50 bg-white/95 backdrop-blur-md border-t border-sand shadow-[0_-6px_25px_-10px_rgba(61,74,68,.15)]" aria-label="Navigation inférieure">
+  <div class="grid grid-cols-5 items-stretch">
+    <a href="#accueil" data-nav="accueil" class="bn-item active flex flex-col items-center justify-center gap-0.5 py-2 text-ink/60">
+      <svg class="bn-icon w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10.5L12 3l9 7.5M5 9.5V21h14V9.5"/></svg>
+      <span class="bn-label text-[10px] font-extrabold">Accueil</span>
+    </a>
+    <a href="#activites" data-nav="activites" class="bn-item flex flex-col items-center justify-center gap-0.5 py-2 text-ink/60">
+      <svg class="bn-icon w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3l2 5.5L20 10l-5.4 1.8L12 17l-2.6-5.2L4 10l6-1.5zM19 16l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/></svg>
+      <span class="bn-label text-[10px] font-extrabold">Activités</span>
+    </a>
+    <a href="#contact" data-nav="contact" class="bn-item flex flex-col items-center justify-center gap-0.5 py-2 text-ink/60">
+      <span class="-mt-5 w-12 h-12 rounded-full bg-sage-500 text-white grid place-items-center shadow-lift">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14M5 12h14"/></svg>
+      </span>
+      <span class="bn-label text-[10px] font-extrabold mt-1">Inscrire</span>
+    </a>
+    <a href="#apropos" data-nav="apropos" class="bn-item flex flex-col items-center justify-center gap-0.5 py-2 text-ink/60">
+      <svg class="bn-icon w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 11v5m0-8h.01"/></svg>
+      <span class="bn-label text-[10px] font-extrabold">À propos</span>
+    </a>
+    <button id="moreBtn" class="bn-item flex flex-col items-center justify-center gap-0.5 py-2 text-ink/60" aria-label="Plus d'options">
+      <svg class="bn-icon w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg>
+      <span class="bn-label text-[10px] font-extrabold">Plus</span>
+    </button>
+  </div>
+</nav>
+
+<!-- ======================= MORE SHEET ======================= -->
+<div id="moreOverlay" class="closed fixed inset-0 z-[60] bg-ink/40 backdrop-blur-sm"></div>
+<div id="moreSheet" class="closed fixed bottom-0 inset-x-0 z-[61] bg-white rounded-t-3xl shadow-lift max-w-lg mx-auto" style="padding-bottom:var(--sab)" role="dialog" aria-label="Plus d'options">
+  <div class="w-10 h-1.5 rounded-full bg-sand mx-auto mt-3"></div>
+  <div class="p-5 grid gap-2.5">
+    <button id="fsBtnMobile" class="touch-target flex items-center gap-4 rounded-2xl px-4 py-3.5 bg-sage-50 hover:bg-sage-100 font-extrabold text-ink text-left w-full">
+      <span class="w-10 h-10 rounded-xl bg-sage-200 text-sage-700 grid place-items-center">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+      </span>
+      <span><span class="fs-label block">Plein écran</span><span class="block text-xs font-bold text-ink/50">Afficher la page en plein écran</span></span>
+    </button>
+
+    <button id="installBtnMobile" class="hidden touch-target flex items-center gap-4 rounded-2xl px-4 py-3.5 bg-sky-50 hover:bg-sky-100 font-extrabold text-ink text-left w-full">
+      <span class="w-10 h-10 rounded-xl bg-sky-200 text-sky-500 grid place-items-center">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+      </span>
+      <span><span class="block">Installer l'application</span><span class="block text-xs font-bold text-ink/50">Ajouter Marino Kids à l'écran d'accueil</span></span>
+    </button>
+
+    <a href="tel:+21629363232" class="touch-target flex items-center gap-4 rounded-2xl px-4 py-3.5 bg-peach-100 hover:bg-peach-200 font-extrabold text-ink">
+      <span class="w-10 h-10 rounded-xl bg-peach-200 text-peach-400 grid place-items-center">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5.5C3 4.1 4.1 3 5.5 3h2L9.5 8 7.6 9.4a13 13 0 0 0 7 7L16 14.5l5 2v2A2.5 2.5 0 0 1 18.5 21 15.5 15.5 0 0 1 3 5.5z"/></svg>
+      </span>
+      <span><span class="block">Appeler maintenant</span><span class="block text-xs font-bold text-ink/50">+216 29 363 232</span></span>
+    </a>
+
+    <button id="shareBtn" class="touch-target flex items-center gap-4 rounded-2xl px-4 py-3.5 bg-lilac-100 hover:bg-lilac-200 font-extrabold text-ink text-left w-full">
+      <span class="w-10 h-10 rounded-xl bg-lilac-200 text-lilac-300 grid place-items-center">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path stroke-linecap="round" d="M8.2 10.8l7.6-3.6M8.2 13.2l7.6 3.6"/></svg>
+      </span>
+      <span><span class="block">Partager</span><span class="block text-xs font-bold text-ink/50">Envoyer la page à un proche</span></span>
+    </button>
+
+    <button id="closeSheet" class="touch-target mt-1 w-full text-center font-extrabold text-ink/60 py-3 rounded-2xl bg-sand">Fermer</button>
+  </div>
+</div>
+
+<main>
+<!-- ======================= HERO ======================= -->
+<section id="accueil" class="relative overflow-hidden bg-gradient-to-b from-sage-50 via-cream to-sky-50">
+  <div class="pointer-events-none absolute -top-16 -left-20 w-64 h-64 md:w-96 md:h-96 rounded-full bg-sage-200/50 blur-2xl" aria-hidden="true"></div>
+  <div class="pointer-events-none absolute top-20 -right-24 w-72 h-72 md:w-[28rem] md:h-[28rem] rounded-full bg-sky-200/50 blur-2xl" aria-hidden="true"></div>
+  <div class="pointer-events-none absolute bottom-24 left-1/3 w-56 h-56 rounded-full bg-peach-100/70 blur-2xl" aria-hidden="true"></div>
+
+  <svg class="float-slow absolute top-28 left-[6%] w-10 h-10 text-sage-400 hidden sm:block" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="12" r="10"/></svg>
+  <svg class="float-med absolute top-36 right-[8%] w-9 h-9 text-sun-300" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4z"/></svg>
+
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="hero-inner grid lg:grid-cols-2 gap-8 lg:gap-8 items-center py-10 md:py-16 lg:py-20">
+
+      <div class="text-center lg:text-left">
+        <span class="inline-flex items-center gap-2 bg-white/80 border border-sage-200 text-sage-700 text-xs md:text-sm font-extrabold px-4 py-2 rounded-full shadow-soft">
+          <span class="w-2 h-2 rounded-full bg-sage-500 animate-pulse"></span>
+          Inscriptions ouvertes – 2026 / 2027 & Club d'été
+        </span>
+
+        <h1 class="mt-5 font-display font-extrabold text-4xl sm:text-5xl xl:text-6xl leading-[1.08] text-ink">
+          Bienvenue chez
+          <span class="relative inline-block text-sage-600">
+            Marino Kids
+            <svg class="absolute -bottom-2 left-0 w-full h-3 text-sun-300" viewBox="0 0 120 12" preserveAspectRatio="none" aria-hidden="true"><path d="M2 9C25 3 60 2 118 7" stroke="currentColor" stroke-width="4" fill="none" stroke-linecap="round"/></svg>
+          </span>
+          <span class="block mt-2 text-sky-500 text-2xl sm:text-3xl xl:text-4xl font-bold">Les Petits Rêveurs</span>
+        </h1>
+
+        <p class="mt-5 text-base md:text-lg text-ink/70 max-w-xl mx-auto lg:mx-0 leading-relaxed">
+          Un univers où chaque enfant grandit à son rythme — école maternelle &amp; club d'enfants au cœur du Bardo, en Tunisie.
+        </p>
+
+        <div class="mt-7 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3.5">
+          <a href="#contact" class="btn-bounce w-full sm:w-auto inline-flex justify-center items-center gap-2 bg-sage-500 hover:bg-sage-600 text-white font-extrabold px-8 py-4 rounded-full shadow-lift text-base touch-target">
+            Pré-inscrire mon enfant
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5-5 5M6 12h12"/></svg>
+          </a>
+          <a href="#activites" class="btn-bounce w-full sm:w-auto inline-flex justify-center items-center gap-2 bg-white hover:bg-sand text-ink font-extrabold px-8 py-4 rounded-full shadow-soft border-2 border-sage-200 text-base touch-target">
+            Découvrir les activités
+          </a>
+        </div>
+
+        <div class="mt-7 flex flex-wrap justify-center lg:justify-start gap-2 text-xs md:text-sm font-bold">
+          <span class="bg-white/80 px-3.5 py-1.5 rounded-full border border-sage-100 text-sage-700">✔ Éveil</span>
+          <span class="bg-white/80 px-3.5 py-1.5 rounded-full border border-sky-100 text-sky-500">✔ Apprentissage</span>
+          <span class="bg-white/80 px-3.5 py-1.5 rounded-full border border-peach-200 text-peach-400">✔ Épanouissement</span>
+        </div>
+      </div>
+
+      <div class="relative mx-auto w-full max-w-sm sm:max-w-md lg:max-w-lg">
+        <div class="relative aspect-square">
+          <div class="absolute inset-4 rounded-blob bg-gradient-to-br from-sage-200 via-sky-100 to-peach-100 shadow-lift" aria-hidden="true"></div>
+          <div class="absolute inset-4 rounded-blob border-4 border-white/70" aria-hidden="true"></div>
+          <svg viewBox="0 0 400 400" class="absolute inset-0 w-full h-full p-8" role="img" aria-label="Enfants joyeux jouant ensemble">
+            <circle cx="330" cy="70" r="26" fill="#FFD36B"/>
+            <g stroke="#F4B73F" stroke-width="5" stroke-linecap="round">
+              <line x1="330" y1="32" x2="330" y2="42"/><line x1="330" y1="98" x2="330" y2="108"/>
+              <line x1="292" y1="70" x2="302" y2="70"/><line x1="358" y1="70" x2="368" y2="70"/>
+              <line x1="303" y1="43" x2="310" y2="50"/><line x1="350" y1="90" x2="357" y2="97"/>
+              <line x1="357" y1="43" x2="350" y2="50"/><line x1="310" y1="90" x2="303" y2="97"/>
+            </g>
+            <circle cx="322" cy="66" r="2.6" fill="#3D4A44"/><circle cx="338" cy="66" r="2.6" fill="#3D4A44"/>
+            <path d="M323 75 q7 6 14 0" stroke="#3D4A44" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <g fill="none" stroke-linecap="round">
+              <path d="M60 300 A80 80 0 0 1 220 300" stroke="#93CBA4" stroke-width="12"/>
+              <path d="M76 300 A64 64 0 0 1 204 300" stroke="#7FC4E8" stroke-width="12"/>
+              <path d="M92 300 A48 48 0 0 1 188 300" stroke="#FFB98F" stroke-width="12"/>
+            </g>
+            <ellipse cx="200" cy="316" rx="150" ry="18" fill="#BCE0C6" opacity=".7"/>
+            <g>
+              <circle cx="140" cy="196" r="34" fill="#FFD9B8"/>
+              <path d="M106 196 a34 34 0 0 1 68 0 z" fill="#4F9A67"/>
+              <circle cx="129" cy="192" r="3.4" fill="#3D4A44"/><circle cx="151" cy="192" r="3.4" fill="#3D4A44"/>
+              <path d="M131 204 q9 8 18 0" stroke="#3D4A44" stroke-width="3" fill="none" stroke-linecap="round"/>
+              <path d="M108 300 q0-52 32-70 q32 18 32 70 z" fill="#7FC4E8"/>
+              <line x1="140" y1="300" x2="140" y2="316" stroke="#3D4A44" stroke-width="7" stroke-linecap="round"/>
+              <line x1="126" y1="316" x2="154" y2="316" stroke="#3D4A44" stroke-width="7" stroke-linecap="round"/>
+            </g>
+            <g>
+              <circle cx="250" cy="182" r="30" fill="#FFD9B8"/>
+              <path d="M220 182 a30 30 0 0 1 60 0 z" fill="#F69B66"/>
+              <circle cx="241" cy="178" r="3.2" fill="#3D4A44"/><circle cx="259" cy="178" r="3.2" fill="#3D4A44"/>
+              <path d="M242 189 q8 7 16 0" stroke="#3D4A44" stroke-width="3" fill="none" stroke-linecap="round"/>
+              <path d="M222 300 q0-48 28-64 q28 16 28 64 z" fill="#C8B3EC"/>
+              <line x1="250" y1="300" x2="250" y2="314" stroke="#3D4A44" stroke-width="7" stroke-linecap="round"/>
+              <line x1="237" y1="314" x2="263" y2="314" stroke="#3D4A44" stroke-width="7" stroke-linecap="round"/>
+            </g>
+            <g>
+              <ellipse cx="80" cy="120" rx="20" ry="25" fill="#F69B66"/>
+              <path d="M80 145 q-8 40 14 66" stroke="#3D4A44" stroke-width="2" fill="none"/>
+              <path d="M76 145 l4 8 4-8" fill="#F69B66"/>
+            </g>
+            <g fill="#FFE7A8">
+              <path d="M300 190 l3 8 8 3-8 3-3 8-3-8-8-3 8-3z"/>
+              <path d="M110 130 l2.5 7 7 2.5-7 2.5-2.5 7-2.5-7-7-2.5 7-2.5z"/>
+            </g>
+          </svg>
+        </div>
+
+        <div class="float-slow absolute -left-1 sm:-left-5 top-8 bg-white rounded-2xl shadow-lift px-4 py-3 flex items-center gap-2.5">
+          <span class="w-9 h-9 rounded-xl bg-sage-100 grid place-items-center text-sage-600">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3l7 3v5c0 4.6-3 8.4-7 10-4-1.6-7-5.4-7-10V6z"/><path stroke-linecap="round" stroke-linejoin="round" d="M9.5 12l1.8 1.8L15 10"/></svg>
+          </span>
+          <span class="text-xs font-extrabold text-ink leading-tight">Environnement<br><span class="text-sage-600">sécurisé</span></span>
+        </div>
+        <div class="float-med absolute -right-1 sm:-right-3 bottom-10 bg-white rounded-2xl shadow-lift px-4 py-3 flex items-center gap-2.5">
+          <span class="w-9 h-9 rounded-xl bg-sun-100 grid place-items-center text-sun-400">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2"/><circle cx="12" cy="12" r="9"/></svg>
+          </span>
+          <span class="text-xs font-extrabold text-ink leading-tight">Club d'été<br><span class="text-sun-400">Places limitées</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <svg class="hero-wave relative" viewBox="0 0 1440 110" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,60 C240,110 480,10 720,50 C960,90 1200,20 1440,60 L1440,110 L0,110 Z" fill="#FDF8F0"/>
+  </svg>
+</section>
+
+<!-- ======================= MARQUEE ======================= -->
+<div class="marquee bg-sage-500 py-3.5 -rotate-1 scale-[1.02] shadow-soft" aria-hidden="true">
+  <div class="marquee-track text-white font-display font-bold text-sm md:text-base tracking-wide">
+    <span class="flex items-center gap-6 pr-6">
+      <span>✦ Inscriptions 2026 / 2027 ouvertes</span><span>✦ Club d'été</span><span>✦ Éveil</span><span>✦ Apprentissage</span><span>✦ Épanouissement</span><span>✦ Bienveillance</span><span>✦ Sécurité</span><span>✦ Confort</span>
+    </span>
+    <span class="flex items-center gap-6 pr-6">
+      <span>✦ Inscriptions 2026 / 2027 ouvertes</span><span>✦ Club d'été</span><span>✦ Éveil</span><span>✦ Apprentissage</span><span>✦ Épanouissement</span><span>✦ Bienveillance</span><span>✦ Sécurité</span><span>✦ Confort</span>
+    </span>
+  </div>
+</div>
+
+<!-- ======================= À PROPOS ======================= -->
+<section id="apropos" class="py-14 md:py-24 bg-cream">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+      <div class="reveal relative order-2 lg:order-1">
+        <div class="relative rounded-[2rem] overflow-hidden shadow-lift bg-gradient-to-br from-sky-100 via-sage-100 to-peach-100 aspect-[4/3]">
+          <svg viewBox="0 0 400 300" class="w-full h-full" role="img" aria-label="Salle de classe chaleureuse et colorée">
+            <rect width="400" height="300" fill="#D8EEF8"/><rect y="200" width="400" height="100" fill="#F5EBDD"/>
+            <rect x="30" y="40" width="130" height="90" rx="8" fill="#fff" stroke="#BCE0C6" stroke-width="5"/>
+            <path d="M45 110 l20-25 15 15 20-30 25 25 15-15 20 30" stroke="#4F9A67" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="65" cy="65" r="10" fill="#FFD36B"/>
+            <rect x="250" y="30" width="110" height="70" rx="10" fill="#EFF7F0" stroke="#B0DCF2" stroke-width="4"/>
+            <text x="305" y="72" text-anchor="middle" font-family="Nunito" font-weight="800" font-size="17" fill="#4F9A67">A B C</text>
+            <rect x="60" y="160" width="90" height="60" rx="10" fill="#93CBA4"/>
+            <rect x="70" y="150" width="90" height="60" rx="10" fill="#BCE0C6"/>
+            <rect x="150" y="170" width="90" height="50" rx="10" fill="#7FC4E8"/>
+            <rect x="240" y="160" width="90" height="60" rx="10" fill="#FFB98F"/>
+            <circle cx="340" cy="230" r="26" fill="#C8B3EC"/><circle cx="340" cy="230" r="14" fill="#fff" opacity=".5"/>
+            <path d="M200 45 l4 10 10 4-10 4-4 10-4-10-10-4 10-4z" fill="#F69B66"/>
+            <path d="M375 105 l3 8 8 3-8 3-3 8-3-8-8-3 8-3z" fill="#FFD36B"/>
+          </svg>
+        </div>
+        <div class="absolute -bottom-5 left-1/2 -translate-x-1/2 sm:left-auto sm:-right-4 sm:translate-x-0 bg-white rounded-2xl shadow-lift px-6 py-4 text-center border border-sage-100">
+          <p class="font-display font-extrabold text-2xl text-sage-600 leading-none">100%</p>
+          <p class="text-xs font-bold text-ink/60 mt-1">Bienveillance &amp; écoute</p>
+        </div>
+      </div>
+
+      <div class="reveal order-1 lg:order-2">
+        <span class="inline-block bg-sage-100 text-sage-700 text-xs font-extrabold tracking-widest uppercase px-4 py-1.5 rounded-full">À propos de nous</span>
+        <h2 class="mt-4 font-display font-extrabold text-3xl sm:text-4xl text-ink leading-tight">
+          Un environnement chaleureux où chaque enfant <span class="text-sky-500">s'épanouit</span>
+        </h2>
+        <p class="mt-5 text-ink/70 leading-relaxed">
+          Chez <strong class="text-ink">Marino Kids – Les Petits Rêveurs</strong>, nous avons créé un univers doux, sécurisé et stimulant, pensé pour les tout-petits. Notre établissement au Bardo accueille les enfants dans un cadre bienveillant où l'apprentissage se fait naturellement, à travers le jeu, la créativité et la découverte.
+        </p>
+        <p class="mt-4 text-ink/70 leading-relaxed">
+          Notre équipe pédagogique attentionnée accompagne chaque enfant à son propre rythme, en cultivant sa curiosité, sa confiance en soi et son autonomie.
+        </p>
+        <ul class="mt-7 grid sm:grid-cols-2 gap-3.5">
+          <li class="flex items-start gap-3 bg-white rounded-2xl px-4 py-3.5 shadow-soft border border-sand">
+            <span class="flex-shrink-0 w-9 h-9 rounded-xl bg-sage-100 text-sage-600 grid place-items-center"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21s-7.5-4.9-9.5-9C1 8.5 3 5 6.5 5c2 0 3.5 1 5 3 1.5-2 3-3 5-3C20 5 23 8.5 21.5 12c-2 4.1-9.5 9-9.5 9z"/></svg></span>
+            <span class="text-sm font-bold text-ink/80 pt-1.5">Accueil bienveillant &amp; personnalisé</span>
+          </li>
+          <li class="flex items-start gap-3 bg-white rounded-2xl px-4 py-3.5 shadow-soft border border-sand">
+            <span class="flex-shrink-0 w-9 h-9 rounded-xl bg-sky-100 text-sky-500 grid place-items-center"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3l7 3v5c0 4.6-3 8.4-7 10-4-1.6-7-5.4-7-10V6z"/><path stroke-linecap="round" stroke-linejoin="round" d="M9.5 12l1.8 1.8L15 10"/></svg></span>
+            <span class="text-sm font-bold text-ink/80 pt-1.5">Espaces sécurisés &amp; adaptés</span>
+          </li>
+          <li class="flex items-start gap-3 bg-white rounded-2xl px-4 py-3.5 shadow-soft border border-sand">
+            <span class="flex-shrink-0 w-9 h-9 rounded-xl bg-peach-100 text-peach-400 grid place-items-center"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.2c1.5-2.4 4-3.2 5.6-1.6 1.6 1.6 1.2 4.4-1 6.8L12 16l-4.6-4.6c-2.2-2.4-2.6-5.2-1-6.8 1.6-1.6 4.1-.8 5.6 1.6z"/></svg></span>
+            <span class="text-sm font-bold text-ink/80 pt-1.5">Équipe pédagogique attentionnée</span>
+          </li>
+          <li class="flex items-start gap-3 bg-white rounded-2xl px-4 py-3.5 shadow-soft border border-sand">
+            <span class="flex-shrink-0 w-9 h-9 rounded-xl bg-lilac-100 text-lilac-300 grid place-items-center"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4"/></svg></span>
+            <span class="text-sm font-bold text-ink/80 pt-1.5">Petits groupes pour plus d'attention</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= ACTIVITÉS ======================= -->
+<section id="activites" class="py-14 md:py-24 bg-gradient-to-b from-sky-50 to-cream relative overflow-hidden">
+  <div class="pointer-events-none absolute top-24 -right-24 w-72 h-72 rounded-full bg-lilac-100/70 blur-3xl" aria-hidden="true"></div>
+  <div class="pointer-events-none absolute bottom-24 -left-24 w-72 h-72 rounded-full bg-sage-100/80 blur-3xl" aria-hidden="true"></div>
+
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="reveal text-center max-w-2xl mx-auto">
+      <span class="inline-block bg-sky-100 text-sky-500 text-xs font-extrabold tracking-widest uppercase px-4 py-1.5 rounded-full">Nos activités</span>
+      <h2 class="mt-4 font-display font-extrabold text-3xl sm:text-4xl text-ink leading-tight">
+        Un programme riche pour <span class="text-sage-600">grandir en s'amusant</span>
+      </h2>
+    </div>
+
+    <div class="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+      <article class="act-card reveal bg-white rounded-3xl p-6 shadow-soft border border-sand">
+        <span class="w-14 h-14 rounded-2xl bg-sage-100 grid place-items-center text-sage-600">
+          <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 5h9M8.5 3v2M6 5c0 3 1.5 5 4.5 5M13 5c0 3-1.5 5-4.5 5M12 12l3.5 7.5a2 2 0 0 1-1.8 3H5.3a2 2 0 0 1-1.8-3L7 12m5 0H7m5 0l1-2m1.5 5H6.5"/></svg>
+        </span>
+        <h3 class="mt-4 font-display font-bold text-lg text-ink">Anglais &amp; Coran Karim</h3>
+        <p class="mt-2 text-sm text-ink/65 leading-relaxed">Initiation ludique à l'anglais et apprentissage doux du Coran, dès le plus jeune âge.</p>
+      </article>
+
+      <article class="act-card reveal bg-white rounded-3xl p-6 shadow-soft border border-sand">
+        <span class="w-14 h-14 rounded-2xl bg-peach-100 grid place-items-center text-peach-400">
+          <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.5 4.5l4 4L8 20H4v-4L15.5 4.5zM13 7l4 4M12 20h8"/></svg>
+        </span>
+        <h3 class="mt-4 font-display font-bold text-lg text-ink">Peinture, bricolage &amp; poterie</h3>
+        <p class="mt-2 text-sm text-ink/65 leading-relaxed">Des ateliers créatifs qui développent la motricité fine et l'imagination.</p>
+      </article>
+
+      <article class="act-card reveal bg-white rounded-3xl p-6 shadow-soft border border-sand">
+        <span class="w-14 h-14 rounded-2xl bg-lilac-100 grid place-items-center text-lilac-300">
+          <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 18V6l10-2v11M9 18a3 3 0 1 1-6 0 3 3 0 0 1 6 0zm10-3a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/></svg>
+        </span>
+        <h3 class="mt-4 font-display font-bold text-lg text-ink">Éveil musical &amp; danse</h3>
+        <p class="mt-2 text-sm text-ink/65 leading-relaxed">Chansons, rythmes et mouvements pour découvrir la musique et l'expression corporelle.</p>
+      </article>
+
+      <article class="act-card reveal bg-white rounded-3xl p-6 shadow-soft border border-sand">
+        <span class="w-14 h-14 rounded-2xl bg-sky-100 grid place-items-center text-sky-500">
+          <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg>
+        </span>
+        <h3 class="mt-4 font-display font-bold text-lg text-ink">Gym, fitness &amp; psychomotricité</h3>
+        <p class="mt-2 text-sm text-ink/65 leading-relaxed">Équilibre, coordination et confiance en soi à travers le mouvement.</p>
+      </article>
+
+      <article class="act-card reveal bg-white rounded-3xl p-6 shadow-soft border border-sand">
+        <span class="w-14 h-14 rounded-2xl bg-sun-100 grid place-items-center text-sun-400">
+          <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 3v7a4 4 0 0 0 8 0V3M8 3h8M12 14v3a4 4 0 0 0 4 4h1M9 18.5c.6 1 1.6 1.5 2.7 1.5"/></svg>
+        </span>
+        <h3 class="mt-4 font-display font-bold text-lg text-ink">Atelier cuisine</h3>
+        <p class="mt-2 text-sm text-ink/65 leading-relaxed">Petits chefs en herbe : recettes simples pour éveiller les sens et l'autonomie.</p>
+      </article>
+
+      <article class="act-card reveal bg-white rounded-3xl p-6 shadow-soft border border-sand">
+        <span class="w-14 h-14 rounded-2xl bg-sage-100 grid place-items-center text-sage-600">
+          <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-5 9c0-2.8 2.2-5 5-5 1.4 0 2.6.5 3.5 1.4M15 4a2.5 2.5 0 1 1 0 5M17 15.5a5 5 0 0 1 0 6M20 13a8 8 0 0 1 0 10"/></svg>
+        </span>
+        <h3 class="mt-4 font-display font-bold text-lg text-ink">Théâtre &amp; Montessori</h3>
+        <p class="mt-2 text-sm text-ink/65 leading-relaxed">Jeu de rôle et pédagogie Montessori pour apprendre en autonomie.</p>
+      </article>
+
+      <article class="act-card reveal sm:col-span-2 lg:col-span-2 bg-gradient-to-br from-sky-100 to-sage-100 rounded-3xl p-6 shadow-soft border border-sky-100">
+        <div class="flex flex-col sm:flex-row sm:items-center gap-5">
+          <span class="flex-shrink-0 w-14 h-14 rounded-2xl bg-white grid place-items-center text-sky-500 shadow-soft">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.5 3h5l1 3h3a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H5.5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h3l1-3zM9 14l2 2 4-4.5"/></svg>
+          </span>
+          <div>
+            <h3 class="font-display font-bold text-lg text-ink">STEAM – Sciences &amp; Créativité</h3>
+            <p class="mt-2 text-sm text-ink/65 leading-relaxed">Science, Technologie, Ingénierie, Arts &amp; Maths : expériences amusantes qui éveillent l'esprit logique et la curiosité.</p>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= VALEURS ======================= -->
+<section id="valeurs" class="py-14 md:py-20 bg-sage-600 relative overflow-hidden">
+  <div class="pointer-events-none absolute -top-16 right-10 w-52 h-52 rounded-full bg-sage-500/60 blur-2xl" aria-hidden="true"></div>
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="reveal text-center">
+      <h2 class="font-display font-extrabold text-3xl sm:text-4xl text-white">Nos valeurs</h2>
+      <p class="mt-3 text-sage-100 max-w-xl mx-auto">Trois piliers qui guident chacune de nos journées auprès de vos enfants.</p>
+    </div>
+    <div class="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6">
+      <div class="reveal bg-white/10 backdrop-blur border border-white/20 rounded-3xl p-7 text-center">
+        <span class="mx-auto w-14 h-14 rounded-full bg-white/20 grid place-items-center">
+          <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21s-7.5-4.9-9.5-9C1 8.5 3 5 6.5 5c2 0 3.5 1 5 3 1.5-2 3-3 5-3C20 5 23 8.5 21.5 12c-2 4.1-9.5 9-9.5 9z"/></svg>
+        </span>
+        <h3 class="mt-4 font-display font-bold text-xl text-white">Bienveillance</h3>
+        <p class="mt-2 text-sm text-sage-100 leading-relaxed">Chaque enfant est accueilli avec amour, respect et écoute.</p>
+      </div>
+      <div class="reveal bg-white/10 backdrop-blur border border-white/20 rounded-3xl p-7 text-center">
+        <span class="mx-auto w-14 h-14 rounded-full bg-white/20 grid place-items-center">
+          <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3l7 3v5c0 4.6-3 8.4-7 10-4-1.6-7-5.4-7-10V6z"/><path stroke-linecap="round" stroke-linejoin="round" d="M9.5 12l1.8 1.8L15 10"/></svg>
+        </span>
+        <h3 class="mt-4 font-display font-bold text-xl text-white">Sécurité</h3>
+        <p class="mt-2 text-sm text-sage-100 leading-relaxed">Des espaces aménagés, surveillés et sécurisés, pour la tranquillité de tous.</p>
+      </div>
+      <div class="reveal bg-white/10 backdrop-blur border border-white/20 rounded-3xl p-7 text-center">
+        <span class="mx-auto w-14 h-14 rounded-full bg-white/20 grid place-items-center">
+          <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2 3 6 4.5 6 9a6 6 0 1 1-12 0c0-4.5 4-6 6-9zM9.5 13.5a2.5 2.5 0 0 0 2.5 2.5"/></svg>
+        </span>
+        <h3 class="mt-4 font-display font-bold text-xl text-white">Confort</h3>
+        <p class="mt-2 text-sm text-sage-100 leading-relaxed">Un cadre douillet où l'enfant se sent chez lui, chaque jour de l'année.</p>
+      </div>
+    </div>
+    <p class="reveal mt-9 text-center font-display font-bold text-sage-100 text-lg">
+      Éveil <span class="text-sun-300">•</span> Apprentissage <span class="text-sun-300">•</span> Épanouissement
+    </p>
+  </div>
+</section>
+
+<!-- ======================= CONTACT ======================= -->
+<section id="contact" class="py-14 md:py-24 bg-cream">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="reveal text-center max-w-2xl mx-auto">
+      <span class="inline-block bg-peach-100 text-peach-400 text-xs font-extrabold tracking-widest uppercase px-4 py-1.5 rounded-full">Contact &amp; Inscriptions</span>
+      <h2 class="mt-4 font-display font-extrabold text-3xl sm:text-4xl text-ink leading-tight">
+        Rejoignez l'aventure <span class="text-sage-600">Marino Kids</span>
+      </h2>
+      <p class="mt-4 text-ink/70">Inscriptions ouvertes pour l'année scolaire <strong>2026 / 2027</strong> et le <strong>club d'été</strong>.</p>
+    </div>
+
+    <div class="mt-10 grid lg:grid-cols-5 gap-6 lg:gap-10">
+      <div class="reveal lg:col-span-2 flex flex-col gap-4">
+        <div class="bg-white rounded-3xl p-6 shadow-soft border border-sand">
+          <h3 class="font-display font-bold text-lg text-ink mb-4">Nous contacter</h3>
+          <a href="tel:29245483" class="touch-target flex items-center gap-4 group mb-2 rounded-2xl px-2 py-2 -mx-2 hover:bg-sage-50 transition-colors">
+            <span class="flex-shrink-0 w-11 h-11 rounded-2xl bg-sage-100 text-sage-600 grid place-items-center">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5.5C3 4.1 4.1 3 5.5 3h2L9.5 8 7.6 9.4a13 13 0 0 0 7 7L16 14.5l5 2v2A2.5 2.5 0 0 1 18.5 21 15.5 15.5 0 0 1 3 5.5z"/></svg>
+            </span>
+            <span>
+              <span class="block text-xs font-bold text-ink/50 uppercase tracking-wide">Téléphone fixe</span>
+              <span class="block font-extrabold text-ink group-hover:text-sage-600">29 245 483</span>
+            </span>
+          </a>
+          <a href="tel:+21629363232" class="touch-target flex items-center gap-4 group rounded-2xl px-2 py-2 -mx-2 hover:bg-sky-50 transition-colors">
+            <span class="flex-shrink-0 w-11 h-11 rounded-2xl bg-sky-100 text-sky-500 grid place-items-center">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18h.01M8.5 21h7a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2z"/></svg>
+            </span>
+            <span>
+              <span class="block text-xs font-bold text-ink/50 uppercase tracking-wide">Mobile / WhatsApp</span>
+              <span class="block font-extrabold text-ink group-hover:text-sky-500">+216 29 363 232</span>
+            </span>
+          </a>
+        </div>
+
+        <div class="bg-white rounded-3xl p-6 shadow-soft border border-sand">
+          <h3 class="font-display font-bold text-lg text-ink mb-4">Nous trouver</h3>
+          <div class="flex items-start gap-4">
+            <span class="flex-shrink-0 w-11 h-11 rounded-2xl bg-peach-100 text-peach-400 grid place-items-center">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21s7-5.3 7-11a7 7 0 1 0-14 0c0 5.7 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>
+            </span>
+            <p class="text-sm text-ink/75 leading-relaxed pt-1">
+              <strong class="text-ink">Le Bardo</strong>, avenue Habib Bougatfa, Bardo 2<br>
+              <span class="text-ink/60">(à côté de Dar Ben Yaghlen)</span>
+            </p>
+          </div>
+          <a href="https://www.google.com/maps/search/?api=1&query=Avenue+Habib+Bougatfa+Bardo+2+Tunisie" target="_blank" rel="noopener" class="touch-target mt-3 inline-flex items-center gap-2 text-sm font-extrabold text-sage-600 hover:text-sage-700 py-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 20l-5.5-2V6L9 8m0 12l6-2m-6 2V8m6 10l5.5 2V8L15 6m0 12V6M9 8l6-2"/></svg>
+            Ouvrir dans Google Maps
+          </a>
+        </div>
+
+        <div class="bg-gradient-to-br from-sun-100 to-peach-100 rounded-3xl p-6 shadow-soft border border-sun-200">
+          <div class="flex items-start gap-4">
+            <span class="flex-shrink-0 w-11 h-11 rounded-2xl bg-white/70 text-sun-400 grid place-items-center">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l2.5 2.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
+            </span>
+            <div>
+              <h3 class="font-display font-bold text-base text-ink">Horaires d'accueil</h3>
+              <p class="text-sm text-ink/70 mt-1">Du lundi au vendredi — <strong class="text-ink">7h30 à 17h30</strong></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal lg:col-span-3">
+        <form id="preinscriptionForm" class="bg-white rounded-3xl p-6 sm:p-8 shadow-lift border border-sand" novalidate>
+          <h3 class="font-display font-bold text-xl text-ink">Formulaire de pré-inscription</h3>
+          <p class="text-sm text-ink/60 mt-1.5">Réponse sous 24h — sans engagement.</p>
+
+          <div class="mt-6 grid sm:grid-cols-2 gap-4">
+            <div>
+              <label for="parentName" class="block text-xs font-extrabold uppercase tracking-wide text-ink/60 mb-1.5">Nom du parent *</label>
+              <input type="text" id="parentName" name="parentName" required autocomplete="name" placeholder="Votre nom complet" class="field w-full rounded-xl border-2 border-sand bg-cream/60 px-4 py-3 text-sm text-ink placeholder:text-ink/35">
+            </div>
+            <div>
+              <label for="phone" class="block text-xs font-extrabold uppercase tracking-wide text-ink/60 mb-1.5">Téléphone *</label>
+              <input type="tel" id="phone" name="phone" required autocomplete="tel" inputmode="tel" placeholder="Ex : 29 245 483" class="field w-full rounded-xl border-2 border-sand bg-cream/60 px-4 py-3 text-sm text-ink placeholder:text-ink/35">
+            </div>
+            <div>
+              <label for="childName" class="block text-xs font-extrabold uppercase tracking-wide text-ink/60 mb-1.5">Prénom de l'enfant *</label>
+              <input type="text" id="childName" name="childName" required placeholder="Prénom de votre enfant" class="field w-full rounded-xl border-2 border-sand bg-cream/60 px-4 py-3 text-sm text-ink placeholder:text-ink/35">
+            </div>
+            <div>
+              <label for="childAge" class="block text-xs font-extrabold uppercase tracking-wide text-ink/60 mb-1.5">Âge de l'enfant *</label>
+              <select id="childAge" name="childAge" required class="field w-full rounded-xl border-2 border-sand bg-cream/60 px-4 py-3 text-sm text-ink">
+                <option value="">Sélectionner…</option>
+                <option>2 ans</option><option>3 ans</option><option>4 ans</option><option>5 ans</option><option>6 ans et +</option>
+              </select>
+            </div>
+            <div class="sm:col-span-2">
+              <label for="program" class="block text-xs font-extrabold uppercase tracking-wide text-ink/60 mb-1.5">Programme souhaité *</label>
+              <select id="program" name="program" required class="field w-full rounded-xl border-2 border-sand bg-cream/60 px-4 py-3 text-sm text-ink">
+                <option value="">Sélectionner…</option>
+                <option>Année scolaire 2026 / 2027</option>
+                <option>Club d'été</option>
+                <option>Activités du week-end</option>
+              </select>
+            </div>
+            <div class="sm:col-span-2">
+              <label for="message" class="block text-xs font-extrabold uppercase tracking-wide text-ink/60 mb-1.5">Message (facultatif)</label>
+              <textarea id="message" name="message" rows="3" placeholder="Précisez vos besoins, horaires souhaités…" class="field w-full rounded-xl border-2 border-sand bg-cream/60 px-4 py-3 text-sm text-ink placeholder:text-ink/35 resize-none"></textarea>
+            </div>
+          </div>
+
+          <p id="formError" class="hidden mt-4 text-sm font-bold text-red-500">Merci de remplir tous les champs obligatoires (*) avant d'envoyer.</p>
+
+          <button type="submit" class="btn-bounce mt-6 w-full inline-flex justify-center items-center gap-2 bg-sage-500 hover:bg-sage-600 text-white font-extrabold px-8 py-4 rounded-full shadow-lift text-base touch-target">
+            Envoyer ma pré-inscription
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></svg>
+          </button>
+          <p class="mt-3 text-center text-xs text-ink/50">Ou appelez-nous au <a href="tel:+21629363232" class="font-bold text-sage-600">+216 29 363 232</a></p>
+        </form>
+
+        <div id="formSuccess" class="hidden bg-white rounded-3xl p-8 sm:p-10 shadow-lift border-2 border-sage-200 text-center">
+          <span class="mx-auto w-16 h-16 rounded-full bg-sage-100 grid place-items-center">
+            <svg class="w-8 h-8 text-sage-600" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 6L9 17l-5-5"/></svg>
+          </span>
+          <h3 class="mt-5 font-display font-bold text-2xl text-ink">Demande envoyée !</h3>
+          <p class="mt-3 text-ink/70 max-w-sm mx-auto">Merci pour votre confiance. Notre équipe vous contactera très vite pour confirmer la pré-inscription de votre petit rêveur.</p>
+          <p class="mt-4 font-extrabold text-sage-600">À très bientôt chez Marino Kids !</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ======================= FOOTER ======================= -->
+<footer class="bg-ink text-cream/80 pt-12 pb-10 lg:pb-8" style="padding-bottom:calc(var(--sab) + 88px)">
+  <div class="lg:pb-0 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid md:grid-cols-3 gap-8">
+      <div>
+        <div class="flex items-center gap-3">
+          <span class="w-11 h-11 rounded-full bg-sage-500 grid place-items-center">
+            <svg viewBox="0 0 24 24" class="w-6 h-6 text-white" fill="currentColor"><path d="M12 3.2c.3-1 1.7-1 2 0l.6 2c.2.6.9.9 1.5.6l1.9-1c.9-.5 1.9.4 1.5 1.4l-1 1.9c-.3.6 0 1.3.6 1.5l2 .6c1 .3 1 1.7 0 2l-2 .6c-.6.2-.9.9-.6 1.5l1 1.9c.5.9-.4 1.9-1.4 1.5l-1.9-1c-.6-.3-1.3 0-1.5.6l-.6 2c-.3 1-1.7 1-2 0l-.6-2c-.2-.6-.9-.9-1.5-.6l-1.9 1c-.9.5-1.9-.4-1.5-1.4l1-1.9c.3-.6 0-1.3-.6-1.5l-2-.6c-1-.3-1-1.7 0-2l2-.6c.6-.2.9-.9.6-1.5l-1-1.9c-.5-.9.4-1.9 1.4-1.5l1.9 1c.6.3 1.3 0 1.5-.6l.6-2Z"/><circle cx="12" cy="12" r="3.4"/></svg>
+          </span>
+          <span>
+            <span class="block font-display font-bold text-lg text-white">Marino Kids</span>
+            <span class="block text-[11px] font-bold tracking-wide text-sage-300 uppercase">Les Petits Rêveurs</span>
+          </span>
+        </div>
+        <p class="mt-4 text-sm leading-relaxed text-cream/60">Un univers où chaque enfant grandit à son rythme. École maternelle &amp; club d'enfants au Bardo, Tunisie.</p>
+        <p class="mt-4 text-xs text-cream/45">NIM : 0426563P</p>
+      </div>
+      <div>
+        <h4 class="font-display font-bold text-white text-base">Liens rapides</h4>
+        <ul class="mt-4 space-y-2.5 text-sm">
+          <li><a href="#apropos" class="hover:text-sage-300">À propos</a></li>
+          <li><a href="#activites" class="hover:text-sage-300">Nos activités</a></li>
+          <li><a href="#valeurs" class="hover:text-sage-300">Nos valeurs</a></li>
+          <li><a href="#contact" class="hover:text-sage-300">Pré-inscription 2026/2027</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-display font-bold text-white text-base">Contact</h4>
+        <ul class="mt-4 space-y-2.5 text-sm">
+          <li><a href="tel:29245483" class="hover:text-sage-300">☎ 29 245 483</a></li>
+          <li><a href="tel:+21629363232" class="hover:text-sage-300">☎ +216 29 363 232</a></li>
+          <li class="text-cream/60">Le Bardo, avenue Habib Bougatfa,<br>Bardo 2 (à côté de Dar Ben Yaghlen)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="mt-8 pt-6 border-t border-cream/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-cream/45">
+      <p>© 2026 Marino Kids – Les Petits Rêveurs. Tous droits réservés.</p>
+      <p class="font-bold text-sage-300">Éveil • Apprentissage • Épanouissement</p>
+    </div>
+  </div>
+</footer>
+
+<!-- ======================= SCRIPTS ======================= -->
+<script>
+(function () {
+  'use strict';
+
+  /* ===== Header shadow ===== */
+  const header = document.getElementById('header');
+  const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 10);
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  /* ===== Mobile burger menu ===== */
+  const burger = document.getElementById('burger');
+  const menu = document.getElementById('mobileMenu');
+  const iconOpen = document.getElementById('iconOpen');
+  const iconClose = document.getElementById('iconClose');
+  function toggleMenu(force) {
+    const open = force !== undefined ? force : !menu.classList.contains('open');
+    menu.classList.toggle('open', open);
+    iconOpen.classList.toggle('hidden', open);
+    iconClose.classList.toggle('hidden', !open);
+    burger.setAttribute('aria-expanded', open);
+  }
+  burger.addEventListener('click', () => toggleMenu());
+  document.querySelectorAll('.mob-link').forEach(a => a.addEventListener('click', () => toggleMenu(false)));
+
+  /* ===== Bottom sheet (Plus) ===== */
+  const sheet = document.getElementById('moreSheet');
+  const overlay = document.getElementById('moreOverlay');
+  const setSheet = (open) => { sheet.classList.toggle('closed', !open); overlay.classList.toggle('closed', !open); };
+  document.getElementById('moreBtn').addEventListener('click', () => setSheet(true));
+  document.getElementById('closeSheet').addEventListener('click', () => setSheet(false));
+  overlay.addEventListener('click', () => setSheet(false));
+
+  /* ===== Reveal on scroll ===== */
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  /* ===== Scrollspy for bottom nav ===== */
+  const navMap = {};
+  document.querySelectorAll('[data-nav]').forEach(a => navMap[a.dataset.nav] = a);
+  const spy = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting && navMap[e.target.id]) {
+        Object.values(navMap).forEach(a => a.classList.remove('active'));
+        navMap[e.target.id].classList.add('active');
+      }
+    });
+  }, { rootMargin: '-40% 0px -55% 0px' });
+  ['accueil', 'apropos', 'activites', 'contact'].forEach(id => { const el = document.getElementById(id); if (el) spy.observe(el); });
+
+  /* ===== Fullscreen ===== */
+  const fsSupported = !!(document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen);
+  function isFs() { return !!(document.fullscreenElement || document.webkitFullscreenElement); }
+  async function toggleFs() {
+    try {
+      if (isFs()) { await (document.exitFullscreen || document.webkitExitFullscreen).call(document); }
+      else {
+        const el = document.documentElement;
+        const req = el.requestFullscreen || el.webkitRequestFullscreen;
+        if (req) { await req.call(el); }
+        else { window.scrollTo(0, 0); } // fallback visuel minimal
+      }
+    } catch (err) { /* navigateur a refusé : on ignore proprement */ }
+    updateFsLabels();
+  }
+  function updateFsLabels() {
+    const on = isFs();
+    document.querySelectorAll('.fs-label').forEach(l => l.textContent = on ? 'Quitter le plein écran' : 'Plein écran');
+  }
+  ['fullscreenchange', 'webkitfullscreenchange'].forEach(ev => document.addEventListener(ev, updateFsLabels));
+  if (fsSupported) {
+    document.getElementById('fsBtnDesktop').addEventListener('click', toggleFs);
+    document.getElementById('fsBtnMobile').addEventListener('click', () => { toggleFs(); setSheet(false); });
+  } else {
+    document.getElementById('fsBtnDesktop').style.display = 'none';
+    document.getElementById('fsBtnMobile').style.display = 'none';
+  }
+
+  /* ===== Share ===== */
+  document.getElementById('shareBtn').addEventListener('click', async () => {
+    const data = { title: 'Marino Kids – Les Petits Rêveurs', text: "École maternelle & club d'enfants au Bardo — inscriptions 2026/2027 ouvertes !", url: location.href };
+    try {
+      if (navigator.share) { await navigator.share(data); }
+      else {
+        await navigator.clipboard.writeText(data.url);
+        const b = document.getElementById('shareBtn');
+        b.querySelector('.block').textContent = 'Lien copié !';
+        setTimeout(() => b.querySelector('.block').textContent = 'Partager', 2000);
+      }
+    } catch (e) { /* annulation par l'utilisateur */ }
+    setSheet(false);
+  });
+
+  /* ===== PWA : manifest injecté ===== */
+  const iconSvg = encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="110" fill="#4F9A67"/><path fill="#fff" d="M256 96c10-34 56-34 66 0l12 44c4 14 24 22 38 13l40-21c22-12 46 10 37 33l-21 40c-8 14-1 33 13 38l44 12c34 10 34 56 0 66l-44 12c-14 4-22 24-13 38l21 40c12 22-10 46-33 37l-40-21c-14-8-33-1-38 13l-12 44c-10 34-56 34-66 0l-12-44c-4-14-24-22-38-13l-40 21c-22 12-46-10-37-33l21-40c8-14 1-33-13-38l-44-12c-34-10-34-56 0-66l44-12c14-4 22-24 13-38l-21-40c-12-22 10-46 33-37l40 21c14 8 33 1 38-13z"/><circle cx="256" cy="256" r="62" fill="#FFD36B"/></svg>`
+  );
+  const manifest = {
+    name: "Marino Kids – Les Petits Rêveurs",
+    short_name: "Marino Kids",
+    description: "École maternelle & club d'enfants au Bardo, Tunisie",
+    start_url: ".",
+    scope: ".",
+    display: "standalone",
+    orientation: "portrait-primary",
+    background_color: "#FDF8F0",
+    theme_color: "#4F9A67",
+    icons: [
+      { src: "data:image/svg+xml," + iconSvg, sizes: "512x512", type: "image/svg+xml", purpose: "any" },
+      { src: "data:image/svg+xml," + iconSvg, sizes: "512x512", type: "image/svg+xml", purpose: "maskable" }
+    ]
+  };
+  try {
+    const blobUrl = URL.createObjectURL(new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' }));
+    document.getElementById('manifestLink').href = blobUrl;
+  } catch (e) { /* manifest déjà en data URI vide : rien à faire */ }
+
+  /* ===== PWA : Service Worker (si sw.js présent sur le serveur) ===== */
+  if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+    navigator.serviceWorker.register('sw.js').catch(() => { /* sw.js absent : mode hors ligne non activé */ });
+  }
+
+  /* ===== PWA : boutons Installer ===== */
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+  const isIos = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  const isAndroid = /android/i.test(navigator.userAgent);
+  let deferredPrompt = null;
+  const installBtns = [document.getElementById('installBtnDesktop'), document.getElementById('installBtnMobile')];
+
+  window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; showInstall(); });
+  function showInstall() { installBtns.forEach(b => b.classList.remove('hidden')); }
+  if (isIos && !isStandalone) showInstall(); // iOS : on affiche pour montrer les instructions
+
+  installBtns.forEach(btn => btn.addEventListener('click', async () => {
+    setSheet(false);
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      await deferredPrompt.userChoice;
+      deferredPrompt = null;
+    } else if (isIos) {
+      alert("Pour installer Marino Kids :\n\n1. Touchez le bouton « Partager » ⎋ en bas de Safari\n2. Faites défiler et touchez « Sur l'écran d'accueil »\n3. Confirmez avec « Ajouter »");
+    } else if (isAndroid) {
+      alert("Pour installer Marino Kids :\n\n1. Ouvrez le menu ⋮ du navigateur\n2. Touchez « Ajouter à l'écran d'accueil » ou « Installer l'application »");
+    }
+  }));
+  if (isStandalone) installBtns.forEach(b => b.style.display = 'none');
+
+  /* ===== Formulaire ===== */
+  const form = document.getElementById('preinscriptionForm');
+  const success = document.getElementById('formSuccess');
+  const errorMsg = document.getElementById('formError');
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (!form.checkValidity()) { errorMsg.classList.remove('hidden'); form.reportValidity(); return; }
+    errorMsg.classList.add('hidden');
+    const data = Object.fromEntries(new FormData(form).entries());
+    console.log('Pré-inscription :', data); // brancher ici votre backend / WhatsApp / e-mail
+    form.classList.add('hidden');
+    success.classList.remove('hidden');
+    success.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+
+  /* ===== Smooth anchors (offset header) ===== */
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', (e) => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (!target) return;
+      e.preventDefault();
+      const y = target.getBoundingClientRect().top + window.scrollY - 80;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    });
+  });
+})();
+</script>
+</body>
+</html>
